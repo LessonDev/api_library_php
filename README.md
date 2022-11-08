@@ -1,13 +1,20 @@
 # Test materielelectrique.com
 
-l'objectif de ce test est de r�aliser 3 petites apis li�es � une gestion des 
+L'objectif de ce test est de réaliser 3 petites apis liées à une gestion des 
 livres dans une bibliotheques
+
+Le temps nécessaire pour la réalisation du test est de 2 à 3 heures.
+
+Pour information, il n'est pas autorisé d'utiliser un framework développé par
+des tiers. Vous pouvez par contre réutiliser des scripts écrits par vos soins
+si vous le souhaitez.
+
 
 ## description des apis
  
 ### GET /books/{id}
 
-cette api doit renvoyer un livre demand�
+cette api doit renvoyer un livre demandé
 
 #### Input
 
@@ -35,7 +42,7 @@ exemple de sortie
  
 ### POST /books
 
-cette api doit permettre de cr�er un livre
+cette api doit permettre de créer un livre
 
 #### Input
 
@@ -45,7 +52,7 @@ liste des parametres (tous sont obligatoires)
 
 #### Output 
 
-Le livre cr�e (cf la sortie de l'api GET /books/{id} )
+Le livre crée (cf la sortie de l'api GET /books/{id} )
 
 ### GET /books
 
@@ -98,7 +105,7 @@ exemple:
  
  ### GET /author/{name}/books
  
- cette api doit renvoyer la liste des livre disponible pour un auteur donn�
+ cette api doit renvoyer la liste des livre disponible pour un auteur donné
  
  #### Input
  
