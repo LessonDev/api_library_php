@@ -1,6 +1,6 @@
 # Test materielelectrique.com
 
-L'objectif de ce test est de réaliser 3 petites apis liées à une gestion des 
+L'objectif de ce test est de réaliser 3 apis liées à une gestion des 
 livres dans une bibliotheques
 
 Le temps nécessaire pour la réalisation du test est de 2 à 3 heures.
