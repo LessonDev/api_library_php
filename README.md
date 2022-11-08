@@ -11,7 +11,7 @@ si vous le souhaitez.
 
 ## livrable
 Merci de fournir un fichier zip de l'ensemble du test réalisé et notes au besoin. 
-A envoyer à recrutement@materielelectrique[dot]com avec comme objet [recrut][test] - livrable 
+
 
 ## description des apis
  
