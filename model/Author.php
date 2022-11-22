@@ -24,6 +24,8 @@ class Author extends  Model
             return 'incorrect_order';
         }
 
+        //*PDOStatement::bindValue — Associe une valeur à un paramètre
+        //*Associe une valeur à un nom correspondant ou à un point d'interrogation (comme paramètre fictif) dans la requê
         $stmt->bindValue(":name", $name, PDO::PARAM_STR);
         $stmt->execute();
 

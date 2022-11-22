@@ -98,10 +98,24 @@ class Controller
             case "POST":
                 //2. POST /books
                 //cette api doit permettre de créer un livre 1
+
+
+                //*php://input est un flux en lecture seule qui permet de lire des données brutes depuis le corps de la requête.
+                //php://input n'est pas disponible avec enctype="multipart/form-data".
+                //JSON => PHP json_decode = deserialize
+                //PHP => JSON json_encode = serialize
+                //*https://www.gekkode.com/developpement/php/php-json_encode-serialisation-des-objets-php-en-json/
                  $data = (array) json_decode(file_get_contents("php://input"), true);
+
+                //*json_decode(string,true)//Récupère une chaîne encodée JSON et la convertit en une valeur de PHP.
+                //*Lorsque ce paramètre vaut true, les objets JSON seront retournés comme tableaux associatifs ; lorsque ce
 
                 $id = $this->model->create($data);
                 if (!$id) {
+                    //*Le code de statut de réponse HTTP 422 Unprocessable Entity
+                    // indique que le serveur a compris le type de contenu de la requête
+                    // et que la syntaxe de la requête est correcte mais que
+                    //* le serveur n'a pas été en mesure de réaliser les instructions demandées.
                     http_response_code(422);
                     echo json_encode(["error" => "non created"]);
                     return;
@@ -118,6 +132,10 @@ class Controller
                 ]);
                 break;
             default:
+                //*405 Method Not Allowed
+                //Le code de statut de réponse HTTP 405 Method Not Allowed indique que
+                // la méthode utilisée pour la requête est connue
+                //* du serveur mais qu'elle n'est pas supportée par la ressource ciblée.
                 http_response_code(405);
                 echo json_encode(["message" => "Method Not Allowed"]);
                 header("Allow: GET, POST");

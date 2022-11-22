@@ -56,6 +56,7 @@ class Books extends  Model
 
         $stmt->execute();
 
+        //*PDO::lastInsertId — Retourne l'identifiant de la dernière ligne insérée ou la valeur d'une séquence
         return $this->connexion->lastInsertId();
     }
 
