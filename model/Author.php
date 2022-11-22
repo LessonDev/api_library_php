@@ -1,0 +1,42 @@
+<?php
+require_once 'Model.php';
+
+class Author extends  Model
+{
+    public $table = 'author';
+
+    //4. GET /author/{name}/books
+    //cette api doit renvoyer la liste des livre disponible pour un auteur donné 2
+    public function getBooksAuthor(string $id, array $data)
+    {
+        // l'api accepte le parametre _order_ qui peut prendre les valeurs
+        // _id_ ou _title_ et triera les livres selon leurs ID ou leurs Titre
+        $order = $data['order'];
+
+        //_{name}_ est le nom de l'auteur en minuscule et des "_" remplacent les espaces
+        $name = str_replace("_"," ","$id");
+
+        $sql = "SELECT books.id, books.name FROM {$this->table} RIGHT JOIN books ON {$this->table}.id = books.{$this->table} WHERE {$this->table}.name = :name ORDER BY $order ";
+
+        $stmt = $this->connexion->prepare($sql);
+
+        if(!$stmt) {
+            return 'incorrect_order';
+        }
+
+        $stmt->bindValue(":name", $name, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $data = [];
+        $i = 0;
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $data["data"][$i]["id"] = $row["id"];
+            $data["data"][$i]["type"] = "book";
+            $data["data"][$i]["name"] = $row["name"];
+            $i++;
+        }
+
+        return $data;
+    }
+
+}
