@@ -28,7 +28,6 @@ class Controller
     }
 
 
-
     private function processResourceRequest(string $method, string $id, $books): void
     {
         if($books == 'books'){
@@ -65,9 +64,50 @@ class Controller
             case "GET":
                 echo json_encode($livre);
                 break;
+            //5. PATCH /books/{id}
+            case "PATCH":
+                $livre = $this->model->get($id);
+                $data = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
+                $rows = $this->model->updatePatch($livre,$id,$data);
+
+                if(!$rows){
+                    http_response_code(422);
+                    echo json_encode(["error" => "non update"]);
+                    return;
+                }
+                $getPath = str_replace("index.php", "$this->table/{$id}", $_SERVER['PHP_SELF']);
+                http_response_code(201);
+                echo json_encode([
+                    "message" => "$this->table $id updated",
+                    "GET" => "$getPath" //Le livre modifier (cf la sortie de l'api GET /books/{id} )
+                ]);
+                break;
+            case "PUT":
+                $livre = $this->model->get($id);
+                $data = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
+                $rows = $this->model->updatePUT($livre,$id,$data);
+
+                if(!$rows){
+                    http_response_code(422);
+                    echo json_encode(["error" => "non update"]);
+                    return;
+                }
+                $getPath = str_replace("index.php", "$this->table/{$id}", $_SERVER['PHP_SELF']);
+                http_response_code(201);
+                echo json_encode([
+                    "message" => "$this->table $id updated",
+                    "GET" => "$getPath" //Le livre modifier (cf la sortie de l'api GET /books/{id} )
+                ]);
+            case "DELETE":
+                $rows = $this->model->delete($id);
+                http_response_code(200);
+                echo json_encode([
+                    "message" => "$this->table id = $id is deleted",
+                ]);
+                break;
             default:
                 http_response_code(405);
-                header("Allow: GET");
+                header("Allow: GET,PATCH,PUT,DELETE");
         }
     }
 

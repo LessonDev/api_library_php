@@ -102,4 +102,58 @@ class Books extends  Model
         return $data;
     }
 
+
+    public function updatePatch(array $current, string $id, array $new): int
+    {
+
+        $sql = "UPDATE {$this->table}
+                SET name = :name, author = :author
+                WHERE id = :id";
+
+        $stmt = $this->connexion->prepare($sql);
+
+        $stmt->bindValue(":name", $new["title"] ?? $current["data"][0]["name"], PDO::PARAM_STR);
+        $stmt->bindValue(":author", $new["author"] ?? intval($current["data"][0]["author"]), PDO::PARAM_STR);
+
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->rowCount();
+    }
+
+
+    public function updatePUT(array $current, string $id, array $new): int
+    {
+
+        $sql = "UPDATE {$this->table}
+                SET name = :name, author = :author
+                WHERE id = :id";
+
+        $stmt = $this->connexion->prepare($sql);
+
+        $stmt->bindValue(":name", $new["title"] , PDO::PARAM_STR);
+        $stmt->bindValue(":author", $new["author"] , PDO::PARAM_STR);
+
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->rowCount();
+    }
+
+    public function delete(string $id): int
+    {
+        $sql = "DELETE FROM {$this->table}
+                WHERE id = :id";
+
+        $stmt = $this->connexion->prepare($sql);
+
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->rowCount();
+    }
+
 }
