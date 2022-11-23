@@ -30,39 +30,49 @@ class Controller
 
     private function processResourceRequest(string $method, string $id, $books): void
     {
-        if($books == 'books'){
-            //4. GET /author/{name}/books
-            //cette api doit renvoyer la liste des livre disponible pour un auteur donné 1
-            $data = (array) json_decode(file_get_contents("php://input"), true);
-            $livre = $this->model->getBooksAuthor($id,$data);
 
-            if(!$livre) {
-                http_response_code(404);
-                echo json_encode(["message" => "$this->table not found"]);
-                return;
-            } elseif($livre == "incorrect_order")
-            {
-                http_response_code(422);
-                echo json_encode(["message" => "Incorrect order: must be 'name book' or 'id'"]);
-                return;
-            }
-
-        }else{
-            //1. GET /books/{id}
-            //cette api doit renvoyer un livre demandé 1
-            $livre = $this->model->get($id);
-            if (!$livre) {
-                http_response_code(404);
-                echo json_encode(["message" => "book not found"]);
-                return;
-            }
-    }
 
         switch ($method) {
             //1. GET /books/{id}
             //cette api doit renvoyer un live demandé 3
             case "GET":
-                echo json_encode($livre);
+                if($books == 'books'){
+                    //4. GET /author/{name}/books
+                    //cette api doit renvoyer la liste des livre disponible pour un auteur donné 1
+                    $data = (array) json_decode(file_get_contents("php://input"), true);
+                    $livre = $this->model->getBooksAuthor($id,$data);
+
+                    if(!$livre) {
+                        http_response_code(404);
+                        echo json_encode(["message" => "$this->table not found"]);
+                        return;
+                    } elseif($livre == "incorrect_order")
+                    {
+                        http_response_code(422);
+                        echo json_encode(["message" => "Incorrect order: must be 'name book' or 'id'"]);
+                        return;
+                    }
+                    if($livre) {
+                        http_response_code(200);
+                        echo json_encode($livre);
+                        return;
+                    }
+
+                }else{
+                    //1. GET /books/{id}
+                    //cette api doit renvoyer un livre demandé 1
+                    $livre = $this->model->get($id);
+                    if (!$livre) {
+                        http_response_code(404);
+                        echo json_encode(["message" => "book not found"]);
+                        return;
+                    }
+                    if ($livre) {
+                        http_response_code(200);
+                        echo json_encode($livre);
+                        return;
+                    }
+                }
                 break;
             //5. PATCH /books/{id}
             case "PATCH":
@@ -84,9 +94,14 @@ class Controller
                 break;
             case "PUT":
                 $livre = $this->model->get($id);
+                if(!$livre){
+                    http_response_code(404);
+                    echo json_encode(["message" => "$this->table  not found"]);
+                    return;
+                }
+
                 $data = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
                 $rows = $this->model->updatePUT($livre,$id,$data);
-
                 if(!$rows){
                     http_response_code(422);
                     echo json_encode(["error" => "non update"]);
@@ -98,8 +113,14 @@ class Controller
                     "message" => "$this->table $id updated",
                     "GET" => "$getPath" //Le livre modifier (cf la sortie de l'api GET /books/{id} )
                 ]);
+                break;
             case "DELETE":
                 $rows = $this->model->delete($id);
+                if(!$rows){
+                    http_response_code(404);
+                    echo json_encode(["message" => "$this->table  not found"]);
+                    return;
+                }
                 http_response_code(200);
                 echo json_encode([
                     "message" => "$this->table id = $id is deleted",
