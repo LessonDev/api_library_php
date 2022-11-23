@@ -5,8 +5,7 @@ class Author extends  Model
 {
     public $table = 'author';
 
-    //4. GET /author/{name}/books
-    //cette api doit renvoyer la liste des livre disponible pour un auteur donné 2
+    //4.2 GET /author/{name}/books
     public function getBooksAuthor(string $id, array $data)
     {
         // l'api accepte le parametre _order_ qui peut prendre les valeurs
@@ -21,7 +20,7 @@ class Author extends  Model
         $stmt = $this->connexion->prepare($sql);
 
         if(!$stmt) {
-            return 'incorrect_order';
+            return 'incorrect_parameters';
         }
 
         //*PDOStatement::bindValue — Associe une valeur à un paramètre

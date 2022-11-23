@@ -6,15 +6,15 @@ class Books extends  Model
 {
     public $table = 'books';
 
-    //1. GET /books/{id}
-    //cette api doit renvoyer un livre demandé 2
+    //1.2 GET /books/{id}
+    //#### Input
+    //_{id}_ est l'identifiant du livre
     public function get(string $id)
     {
         $sql ="SELECT  books.id , books.name, author.id as ai FROM {$this->table} JOIN author ON books.author = author.id WHERE books.id = :id";
 
         $stmt = $this->connexion->prepare($sql);
 
-        //_{id}_ est l'identifiant du livre
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -39,8 +39,7 @@ class Books extends  Model
         return $data;
     }
 
-    //2. POST /books
-    //cette api doit permettre de créer un livre 2
+    //2.2 POST /books
     public function create(array $data): string
     {
         $sql = "INSERT INTO {$this->table} (name, author)
@@ -60,20 +59,19 @@ class Books extends  Model
         return $this->connexion->lastInsertId();
     }
 
-    //3. GET /books
-    //cette API doit renvoyer la liste des livres dans le catalogue 2
+    //3.2 GET /books
     public function getAll(array $data){
 
         // l'api accepte le parametre _order_ qui peut prendre les valeurs
         // _author_ ou _title_ et triera les livres par auteur ou par titre
-        $order = $data['order'];
+        $order = $data['order'] ?? 'id';
 
-        $sql ="SELECT  books.id , books.name, author.id as ai FROM {$this->table} JOIN author ON books.author = author.id ORDER BY $order";
+        $sql ="SELECT books.id, books.name, author.id as ai FROM {$this->table} JOIN author ON books.author = author.id ORDER BY $order";
 
         $stmt = $this->connexion->prepare($sql);
 
         if(!$stmt) {
-            return 'incorrect_order';
+            return 'incorrect_parameters';
         }
         $stmt->bindValue(":order", $order, PDO::PARAM_STR);
 
@@ -102,10 +100,9 @@ class Books extends  Model
         return $data;
     }
 
-
+    //5.2 PATCH /books/{id}
     public function updatePatch(array $current, string $id, array $new): int
     {
-
         $sql = "UPDATE {$this->table}
                 SET name = :name, author = :author
                 WHERE id = :id";
@@ -113,7 +110,7 @@ class Books extends  Model
         $stmt = $this->connexion->prepare($sql);
 
         $stmt->bindValue(":name", $new["title"] ?? $current["data"][0]["name"], PDO::PARAM_STR);
-        $stmt->bindValue(":author", $new["author"] ?? intval($current["data"][0]["author"]), PDO::PARAM_STR);
+        $stmt->bindValue(":author", $new["author"] ?? intval($current["data"][0]["author"]["id"]), PDO::PARAM_STR);
 
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
 
@@ -122,10 +119,9 @@ class Books extends  Model
         return $stmt->rowCount();
     }
 
-
+    //6.2 PUT /books/{id}
     public function updatePUT(array $current, string $id, array $new): int
     {
-
         $sql = "UPDATE {$this->table}
                 SET name = :name, author = :author
                 WHERE id = :id";

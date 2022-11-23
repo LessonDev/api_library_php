@@ -9,80 +9,77 @@ class Controller
 
     public function __construct($model)
     {
-        $this->table = $model->table; //properties
-        $this->model = $model; //methods
+        $this->table = $model->table;
+        $this->model = $model;
     }
 
     public function processRequest(string $method, ?string $id, ?string $books): void
     {
-
         if ($id) {
-
             $this->processResourceRequest($method, $id, $books);
-
         } else {
-
             $this->processCollectionRequest($method);
-
         }
     }
 
 
     private function processResourceRequest(string $method, string $id, $books): void
     {
-
-
         switch ($method) {
-            //1. GET /books/{id}
-            //cette api doit renvoyer un live demandé 3
+            //4.1 GET /author/{name}/books
+            //cette api doit renvoyer la liste des livre disponible pour un auteur donné
             case "GET":
                 if($books == 'books'){
-                    //4. GET /author/{name}/books
-                    //cette api doit renvoyer la liste des livre disponible pour un auteur donné 1
-                    $data = (array) json_decode(file_get_contents("php://input"), true);
-                    $livre = $this->model->getBooksAuthor($id,$data);
-
-                    if(!$livre) {
+                    //#### Input
+                    // l'api accepte le parametre _order_ qui peut prendre les valeurs _id_ ou _title_
+                    $param = (array) json_decode(file_get_contents("php://input"), true);
+                    $data = $this->model->getBooksAuthor($id,$param);
+                    //4.3 GET /author/{name}/books
+                    if(!$data) {
                         http_response_code(404);
                         echo json_encode(["message" => "$this->table not found"]);
                         return;
-                    } elseif($livre == "incorrect_order")
-                    {
+                    }
+                    elseif($data == "incorrect_parameters") {
                         http_response_code(422);
-                        echo json_encode(["message" => "Incorrect order: must be 'name book' or 'id'"]);
+                        echo json_encode(["message" => "Incorrect parameter: must be 'title' book or 'id'"]);
                         return;
                     }
-                    if($livre) {
-                        http_response_code(200);
-                        echo json_encode($livre);
-                        return;
-                    }
-
+                    http_response_code(200);
+                    echo json_encode($data);
+                    return;
                 }else{
-                    //1. GET /books/{id}
-                    //cette api doit renvoyer un livre demandé 1
-                    $livre = $this->model->get($id);
-                    if (!$livre) {
+                    //1.1 GET /books/{id}
+                    //cette api doit renvoyer un livre demandé
+                    $data = $this->model->get($id);
+                    //1.3 GET /books/{id}
+                    //Un livre au format JSON
+                    if (!$data) {
                         http_response_code(404);
                         echo json_encode(["message" => "book not found"]);
                         return;
                     }
-                    if ($livre) {
-                        http_response_code(200);
-                        echo json_encode($livre);
-                        return;
-                    }
+                    http_response_code(200);
+                    echo json_encode($data);
+                    return;
                 }
-                break;
-            //5. PATCH /books/{id}
+            break;
+            //5.1 PATCH /books/{id}
             case "PATCH":
-                $livre = $this->model->get($id);
-                $data = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
-                $rows = $this->model->updatePatch($livre,$id,$data);
+                $current = $this->model->get($id);
+                if(!$current){
+                    http_response_code(404);
+                    echo json_encode(["message" => "$this->table not found"]);
+                    return;
+                }
+                $param = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
+                $data = $this->model->updatePatch($current,$id,$param);
 
-                if(!$rows){
+                //5.3 PATCH /books/{id}
+                //Un livre au format JSON
+                if(!$data){
                     http_response_code(422);
-                    echo json_encode(["error" => "non update"]);
+                    echo json_encode(["error" => "non update, change was not identified"]);
                     return;
                 }
                 $getPath = str_replace("index.php", "$this->table/{$id}", $_SERVER['PHP_SELF']);
@@ -93,18 +90,21 @@ class Controller
                 ]);
                 break;
             case "PUT":
-                $livre = $this->model->get($id);
-                if(!$livre){
+                //6.1 PUT /books/{id}
+                $current = $this->model->get($id);
+                if(!$current){
                     http_response_code(404);
                     echo json_encode(["message" => "$this->table  not found"]);
                     return;
                 }
+                $param = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
+                $data = $this->model->updatePUT($current,$id,$param);
 
-                $data = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
-                $rows = $this->model->updatePUT($livre,$id,$data);
-                if(!$rows){
+                //6.3 PUT /books/{id}
+                //Un livre au format JSON
+                if(!$data){
                     http_response_code(422);
-                    echo json_encode(["error" => "non update"]);
+                    echo json_encode(["error" => "non update, change was not identified"]);
                     return;
                 }
                 $getPath = str_replace("index.php", "$this->table/{$id}", $_SERVER['PHP_SELF']);
@@ -115,10 +115,15 @@ class Controller
                 ]);
                 break;
             case "DELETE":
-                $rows = $this->model->delete($id);
-                if(!$rows){
+                //7.1 DELETE /books/{id}
+                //7.1 DELETE /author/{id}
+                $data = $this->model->delete($id);
+                //7.3 DELETE /books/{id}
+                //7.3 DELETE /author/{id}
+                //Un livre au format JSON
+                if(!$data){
                     http_response_code(404);
-                    echo json_encode(["message" => "$this->table  not found"]);
+                    echo json_encode(["message" => "$this->table not found"]);
                     return;
                 }
                 http_response_code(200);
@@ -136,43 +141,53 @@ class Controller
     {
 
         switch ($method) {
-            //3. GET /books
-            //cette API doit renvoyer la liste des livres dans le catalogue 1
+            //3.1 GET /books
+            //cette API doit renvoyer la liste des livres dans le catalogue
             case "GET":
-                $data = (array) json_decode(file_get_contents("php://input"), true);
+                //#### Input
+                // l'api accepte le parametre _order_ qui peut prendre
+                // les valeurs _author_ ou _title_ et triera les livres par auteur ou par titre
+                $param = (array) json_decode(file_get_contents("php://input"), true);
 
-                $livres =  $this->model->getAll($data);
-
-                if(!$livres) {
+                $data =  $this->model->getAll($param);
+                //3.2 GET /books
+                //Une liste au format JSON
+                if(!$data) {
                     http_response_code(404);
                     echo json_encode(["message" => "$this->table  not found"]);
                     return;
-                } elseif($livres == "incorrect_order")
-                {
+                }
+                elseif($data == "incorrect_parameters") {
                     http_response_code(422);
-                    echo json_encode(["message" => "Incorrect order: must be 'name book' or 'author'"]);
+                    echo json_encode(["message" => "Incorrect parameter: must be 'title' book or 'author'"]);
                     return;
                 }
-
-                echo json_encode($livres);
+                http_response_code(200);
+                echo json_encode($data);
+                return;
                 break;
             case "POST":
-                //2. POST /books
-                //cette api doit permettre de créer un livre 1
-
+                //2.1 POST /books
+                //cette api doit permettre de créer un livre
 
                 //*php://input est un flux en lecture seule qui permet de lire des données brutes depuis le corps de la requête.
                 //php://input n'est pas disponible avec enctype="multipart/form-data".
                 //JSON => PHP json_decode = deserialize
                 //PHP => JSON json_encode = serialize
                 //*https://www.gekkode.com/developpement/php/php-json_encode-serialisation-des-objets-php-en-json/
-                 $data = (array) json_decode(file_get_contents("php://input"), true);
+
+                // Input
+                // liste des parametres (tous sont obligatoires)
+                // __title__, titre du livre
+                //__author__, id de l'auteur
+                $param = (array) json_decode(file_get_contents("php://input"), true);
 
                 //*json_decode(string,true)//Récupère une chaîne encodée JSON et la convertit en une valeur de PHP.
                 //*Lorsque ce paramètre vaut true, les objets JSON seront retournés comme tableaux associatifs ; lorsque ce
 
-                $id = $this->model->create($data);
-                if (!$id) {
+                $data = $this->model->create($param);
+                //2.3 POST /books
+                if (!$data) {
                     //*Le code de statut de réponse HTTP 422 Unprocessable Entity
                     // indique que le serveur a compris le type de contenu de la requête
                     // et que la syntaxe de la requête est correcte mais que
@@ -181,15 +196,13 @@ class Controller
                     echo json_encode(["error" => "non created"]);
                     return;
                 }
-
-                //2. POST /books
                 //cette api doit permettre de créer un livre 3
-
-                $getPath = str_replace("index.php", "$this->table/{$id}", $_SERVER['PHP_SELF']);
+                $getPath = str_replace("index.php", "$this->table/{$data}", $_SERVER['PHP_SELF']);
                 http_response_code(201);
                 echo json_encode([
                     "message" => "$this->table created",
-                    "GET" => "$getPath" //Le livre crée (cf la sortie de l'api GET /books/{id} )
+                    //Le livre crée (cf la sortie de l'api GET /books/{id} )
+                    "GET" => "$getPath" //Le livre modifier (cf la sortie de l'api GET /books/{id} )
                 ]);
                 break;
             default:

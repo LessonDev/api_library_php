@@ -12,6 +12,8 @@ class Model  extends  Database
         $this->connexion = $this->getConnection();
     }
 
+    //7.2 DELETE /books/{id}
+    //8.2 DELETE /author/{id}
     public function delete(string $id): int
     {
         $sql = "DELETE FROM {$this->table}

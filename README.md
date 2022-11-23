@@ -15,7 +15,7 @@ Merci de fournir un fichier zip de l'ensemble du test réalisé et notes au beso
 
 ## description des apis
  
-### GET /books/{id}
+###1. GET /books/{id}
 
 cette api doit renvoyer un livre demandé
 
@@ -43,7 +43,7 @@ exemple de sortie
 }
 ```
  
-### POST /books
+###2. POST /books
 
 cette api doit permettre de créer un livre
 
@@ -57,7 +57,7 @@ liste des parametres (tous sont obligatoires)
 
 Le livre crée (cf la sortie de l'api GET /books/{id} )
 
-### GET /books
+###3. GET /books
 
 cette API doit renvoyer la liste des livres dans le catalogue
 
@@ -106,7 +106,7 @@ exemple:
 }
 ```
  
- ### GET /author/{name}/books
+ ###4. GET /author/{name}/books
  
  cette api doit renvoyer la liste des livre disponible pour un auteur donné
  
@@ -138,3 +138,51 @@ exemple:
     ]
 }
 ```
+
+###5. PATCH /books/{id}
+
+cette API doit modifier avec method PATCH la livre dans le catalogue
+
+#### Input
+
+_{id}_ est l'identifiant du livre
+
+#### Output
+
+Un livre au format JSON
+
+###6. PUT /books/{id}
+
+cette API doit modifier avec method PUT la livre dans le catalogue
+
+#### Input
+
+_{id}_ est l'identifiant du livre
+
+#### Output
+
+Un livre au format JSON
+
+###7. DELETE /books/{id}
+
+cette API doit supprimer la livre dans le catalogue
+
+#### Input
+
+_{id}_ est l'identifiant du livre
+
+#### Output
+
+Un livre au format JSON
+
+###8. DELETE /author/{id}
+
+cette API doit supprimer la livre dans le catalogue
+
+#### Input
+
+_{id}_ est l'identifiant du livre
+
+#### Output
+
+Un livre au format JSON
