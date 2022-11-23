@@ -15,7 +15,7 @@ class Author extends  Model
         //_{name}_ est le nom de l'auteur en minuscule et des "_" remplacent les espaces
         $name = str_replace("_"," ","$id");
 
-        $sql = "SELECT books.id, books.name FROM {$this->table} RIGHT JOIN books ON {$this->table}.id = books.{$this->table} WHERE {$this->table}.name = :name ORDER BY $order ";
+        $sql = "SELECT books.id, books.title FROM {$this->table} RIGHT JOIN books ON {$this->table}.id = books.{$this->table} WHERE {$this->table}.name = :name ORDER BY $order ";
 
         $stmt = $this->connexion->prepare($sql);
 
@@ -33,7 +33,7 @@ class Author extends  Model
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $data["data"][$i]["id"] = $row["id"];
             $data["data"][$i]["type"] = "book";
-            $data["data"][$i]["name"] = $row["name"];
+            $data["data"][$i]["title"] = $row["title"];
             $i++;
         }
 

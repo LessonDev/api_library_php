@@ -21,66 +21,66 @@ USE `test_materielelectrique` ;
 -- Table `test_materielelectrique`.`users`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `test_materielelectrique`.`users` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `index2` (`email` ASC),
-  UNIQUE INDEX `index3` (`name` ASC))
-ENGINE = InnoDB;
+                                                                 `id` INT NOT NULL AUTO_INCREMENT,
+                                                                 `name` VARCHAR(45) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `index2` (`email` ASC),
+    UNIQUE INDEX `index3` (`name` ASC))
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `test_materielelectrique`.`author`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `test_materielelectrique`.`author` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  INDEX `index2` (`name` ASC))
-ENGINE = InnoDB;
+                                                                  `id` INT NOT NULL AUTO_INCREMENT,
+                                                                  `name` VARCHAR(45) NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `index2` (`name` ASC))
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `test_materielelectrique`.`books`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `test_materielelectrique`.`books` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `author` INT NOT NULL,
-  PRIMARY KEY (`id`, `author`),
-  INDEX `fk_books_table3_idx` (`author` ASC),
-  CONSTRAINT `fk_books_table3`
+                                                                 `id` INT NOT NULL AUTO_INCREMENT,
+                                                                 `title` VARCHAR(45) NOT NULL,
+    `author` INT NOT NULL,
+    PRIMARY KEY (`id`, `author`),
+    INDEX `fk_books_table3_idx` (`author` ASC),
+    CONSTRAINT `fk_books_table3`
     FOREIGN KEY (`author`)
     REFERENCES `test_materielelectrique`.`author` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `test_materielelectrique`.`users_has_books`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `test_materielelectrique`.`users_has_books` (
-  `users_id` INT NOT NULL,
-  `books_id` INT NOT NULL,
-  `borrowed` DATE NOT NULL,
-  `return` DATE NULL,
-  INDEX `fk_users_has_books_books1_idx` (`books_id` ASC),
-  INDEX `fk_users_has_books_users1_idx` (`users_id` ASC),
-  PRIMARY KEY (`users_id`, `books_id`),
-  INDEX `index4` (`return` ASC),
-  CONSTRAINT `fk_users_has_books_users1`
+                                                                           `users_id` INT NOT NULL,
+                                                                           `books_id` INT NOT NULL,
+                                                                           `borrowed` DATE NOT NULL,
+                                                                           `return` DATE NULL,
+                                                                           INDEX `fk_users_has_books_books1_idx` (`books_id` ASC),
+    INDEX `fk_users_has_books_users1_idx` (`users_id` ASC),
+    PRIMARY KEY (`users_id`, `books_id`),
+    INDEX `index4` (`return` ASC),
+    CONSTRAINT `fk_users_has_books_users1`
     FOREIGN KEY (`users_id`)
     REFERENCES `test_materielelectrique`.`users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_users_has_books_books1`
+    CONSTRAINT `fk_users_has_books_books1`
     FOREIGN KEY (`books_id`)
     REFERENCES `test_materielelectrique`.`books` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+    ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
@@ -115,12 +115,12 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `test_materielelectrique`;
-INSERT INTO `test_materielelectrique`.`books` (`id`, `name`, `author`) VALUES (1, 'The Colour of Magic', 2);
-INSERT INTO `test_materielelectrique`.`books` (`id`, `name`, `author`) VALUES (2, 'Going Postal', 2);
-INSERT INTO `test_materielelectrique`.`books` (`id`, `name`, `author`) VALUES (3, 'Thief of Time', 2);
-INSERT INTO `test_materielelectrique`.`books` (`id`, `name`, `author`) VALUES (4, 'Foundation', 1);
-INSERT INTO `test_materielelectrique`.`books` (`id`, `name`, `author`) VALUES (5, 'The Caves of Steel', 1);
-INSERT INTO `test_materielelectrique`.`books` (`id`, `name`, `author`) VALUES (6, '1984', 3);
+INSERT INTO `test_materielelectrique`.`books` (`id`, `title`, `author`) VALUES (1, 'The Colour of Magic', 2);
+INSERT INTO `test_materielelectrique`.`books` (`id`, `title`, `author`) VALUES (2, 'Going Postal', 2);
+INSERT INTO `test_materielelectrique`.`books` (`id`, `title`, `author`) VALUES (3, 'Thief of Time', 2);
+INSERT INTO `test_materielelectrique`.`books` (`id`, `title`, `author`) VALUES (4, 'Foundation', 1);
+INSERT INTO `test_materielelectrique`.`books` (`id`, `title`, `author`) VALUES (5, 'The Caves of Steel', 1);
+INSERT INTO `test_materielelectrique`.`books` (`id`, `title`, `author`) VALUES (6, '1984', 3);
 
 COMMIT;
 
