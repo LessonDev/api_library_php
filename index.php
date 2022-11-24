@@ -1,21 +1,17 @@
 <?php
 
-use Controller\Controller;
-
-require_once './controller/Controller.php';
-
 spl_autoload_register(function ($class) {
-    $_class = str_replace("\\", "/", "/model/$class.php");
+    $_class = str_replace("\\", "/", "/src/$class.php");
     require __DIR__ . "$_class";
 });
 
 set_error_handler("ErrorHandler::handleError");
-
-
 set_exception_handler("ErrorHandler::handleException");
 
 header("Access-Control-Allow-Origin: *");
 header("Content-type: application/json; charset=UTF-8");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 $parts = explode("/", $_SERVER["REQUEST_URI"]);
 
