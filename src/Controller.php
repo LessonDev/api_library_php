@@ -78,7 +78,7 @@ class Controller
                 //Un livre au format JSON
                 if(!$data){
                     http_response_code(422);
-                    echo json_encode(["error" => "non update, change was not identified"]);
+                    echo json_encode(["error" => "non update,no change detected"]);
                     return;
                 }
                 $getPath = str_replace("index.php", "$this->table/{$id}", $_SERVER['PHP_SELF']);
@@ -93,7 +93,7 @@ class Controller
                 $current = $this->model->get($id);
                 if(!$current){
                     http_response_code(404);
-                    echo json_encode(["message" => "$this->table  not found"]);
+                    echo json_encode(["message" => "$this->table not found"]);
                     return;
                 }
                 $param = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
@@ -103,7 +103,7 @@ class Controller
                 //Un livre au format JSON
                 if(!$data){
                     http_response_code(422);
-                    echo json_encode(["error" => "non update, change was not identified"]);
+                    echo json_encode(["error" => "non update,no change detected"]);
                     return;
                 }
                 $getPath = str_replace("index.php", "$this->table/{$id}", $_SERVER['PHP_SELF']);
@@ -153,7 +153,7 @@ class Controller
                 //Une liste au format JSON
                 if(!$data) {
                     http_response_code(404);
-                    echo json_encode(["message" => "$this->table  not found"]);
+                    echo json_encode(["message" => "$this->table not found"]);
                     return;
                 }
                 elseif($data == "incorrect_parameters") {
