@@ -12,7 +12,7 @@ class Database
     public function __construct()
     {
         $this->host = 'localhost';
-        $this->name = 'test_materielelectrique';
+        $this->name = 'api_library_php';
         $this->user = 'root';
         $this->password = 'root';
     }

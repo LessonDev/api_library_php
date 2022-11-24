@@ -8,19 +8,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema test_materielelectrique
+-- Schema api_library_php
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema test_materielelectrique
+-- Schema api_library_php
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `test_materielelectrique` DEFAULT CHARACTER SET utf8 ;
-USE `test_materielelectrique` ;
+CREATE SCHEMA IF NOT EXISTS `api_library_php` DEFAULT CHARACTER SET utf8 ;
+USE `api_library_php` ;
 
 -- -----------------------------------------------------
--- Table `test_materielelectrique`.`users`
+-- Table `api_library_php`.`users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `test_materielelectrique`.`users` (
+CREATE TABLE IF NOT EXISTS `api_library_php`.`users` (
                                                                  `id` INT NOT NULL AUTO_INCREMENT,
                                                                  `name` VARCHAR(45) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS `test_materielelectrique`.`users` (
 
 
 -- -----------------------------------------------------
--- Table `test_materielelectrique`.`author`
+-- Table `api_library_php`.`author`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `test_materielelectrique`.`author` (
+CREATE TABLE IF NOT EXISTS `api_library_php`.`author` (
                                                                   `id` INT NOT NULL AUTO_INCREMENT,
                                                                   `name` VARCHAR(45) NOT NULL,
     PRIMARY KEY (`id`),
@@ -42,9 +42,9 @@ CREATE TABLE IF NOT EXISTS `test_materielelectrique`.`author` (
 
 
 -- -----------------------------------------------------
--- Table `test_materielelectrique`.`books`
+-- Table `api_library_php`.`books`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `test_materielelectrique`.`books` (
+CREATE TABLE IF NOT EXISTS `api_library_php`.`books` (
                                                                  `id` INT NOT NULL AUTO_INCREMENT,
                                                                  `title` VARCHAR(45) NOT NULL,
     `author` INT NOT NULL,
@@ -52,16 +52,16 @@ CREATE TABLE IF NOT EXISTS `test_materielelectrique`.`books` (
     INDEX `fk_books_table3_idx` (`author` ASC),
     CONSTRAINT `fk_books_table3`
     FOREIGN KEY (`author`)
-    REFERENCES `test_materielelectrique`.`author` (`id`)
+    REFERENCES `api_library_php`.`author` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `test_materielelectrique`.`users_has_books`
+-- Table `api_library_php`.`users_has_books`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `test_materielelectrique`.`users_has_books` (
+CREATE TABLE IF NOT EXISTS `api_library_php`.`users_has_books` (
                                                                            `users_id` INT NOT NULL,
                                                                            `books_id` INT NOT NULL,
                                                                            `borrowed` DATE NOT NULL,
@@ -72,12 +72,12 @@ CREATE TABLE IF NOT EXISTS `test_materielelectrique`.`users_has_books` (
     INDEX `index4` (`return` ASC),
     CONSTRAINT `fk_users_has_books_users1`
     FOREIGN KEY (`users_id`)
-    REFERENCES `test_materielelectrique`.`users` (`id`)
+    REFERENCES `api_library_php`.`users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
     CONSTRAINT `fk_users_has_books_books1`
     FOREIGN KEY (`books_id`)
-    REFERENCES `test_materielelectrique`.`books` (`id`)
+    REFERENCES `api_library_php`.`books` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
     ENGINE = InnoDB;
@@ -88,53 +88,53 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- -----------------------------------------------------
--- Data for table `test_materielelectrique`.`users`
+-- Data for table `api_library_php`.`users`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `test_materielelectrique`;
-INSERT INTO `test_materielelectrique`.`users` (`id`, `name`, `email`) VALUES (1, 'Alice', 'alice@example.tld');
-INSERT INTO `test_materielelectrique`.`users` (`id`, `name`, `email`) VALUES (2, 'Bob', 'bob@example.tld');
+USE `api_library_php`;
+INSERT INTO `api_library_php`.`users` (`id`, `name`, `email`) VALUES (1, 'Alice', 'alice@example.tld');
+INSERT INTO `api_library_php`.`users` (`id`, `name`, `email`) VALUES (2, 'Bob', 'bob@example.tld');
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `test_materielelectrique`.`author`
+-- Data for table `api_library_php`.`author`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `test_materielelectrique`;
-INSERT INTO `test_materielelectrique`.`author` (`id`, `name`) VALUES (1, 'Isaac Asimov');
-INSERT INTO `test_materielelectrique`.`author` (`id`, `name`) VALUES (2, 'Terry Pratchett');
-INSERT INTO `test_materielelectrique`.`author` (`id`, `name`) VALUES (3, 'George Orwell');
+USE `api_library_php`;
+INSERT INTO `api_library_php`.`author` (`id`, `name`) VALUES (1, 'Isaac Asimov');
+INSERT INTO `api_library_php`.`author` (`id`, `name`) VALUES (2, 'Terry Pratchett');
+INSERT INTO `api_library_php`.`author` (`id`, `name`) VALUES (3, 'George Orwell');
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `test_materielelectrique`.`books`
+-- Data for table `api_library_php`.`books`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `test_materielelectrique`;
-INSERT INTO `test_materielelectrique`.`books` (`id`, `title`, `author`) VALUES (1, 'The Colour of Magic', 2);
-INSERT INTO `test_materielelectrique`.`books` (`id`, `title`, `author`) VALUES (2, 'Going Postal', 2);
-INSERT INTO `test_materielelectrique`.`books` (`id`, `title`, `author`) VALUES (3, 'Thief of Time', 2);
-INSERT INTO `test_materielelectrique`.`books` (`id`, `title`, `author`) VALUES (4, 'Foundation', 1);
-INSERT INTO `test_materielelectrique`.`books` (`id`, `title`, `author`) VALUES (5, 'The Caves of Steel', 1);
-INSERT INTO `test_materielelectrique`.`books` (`id`, `title`, `author`) VALUES (6, '1984', 3);
+USE `api_library_php`;
+INSERT INTO `api_library_php`.`books` (`id`, `title`, `author`) VALUES (1, 'The Colour of Magic', 2);
+INSERT INTO `api_library_php`.`books` (`id`, `title`, `author`) VALUES (2, 'Going Postal', 2);
+INSERT INTO `api_library_php`.`books` (`id`, `title`, `author`) VALUES (3, 'Thief of Time', 2);
+INSERT INTO `api_library_php`.`books` (`id`, `title`, `author`) VALUES (4, 'Foundation', 1);
+INSERT INTO `api_library_php`.`books` (`id`, `title`, `author`) VALUES (5, 'The Caves of Steel', 1);
+INSERT INTO `api_library_php`.`books` (`id`, `title`, `author`) VALUES (6, '1984', 3);
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `test_materielelectrique`.`users_has_books`
+-- Data for table `api_library_php`.`users_has_books`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `test_materielelectrique`;
-INSERT INTO `test_materielelectrique`.`users_has_books` (`users_id`, `books_id`, `borrowed`, `return`) VALUES (1, 1, '2016-01-31', '2016-02-02');
-INSERT INTO `test_materielelectrique`.`users_has_books` (`users_id`, `books_id`, `borrowed`, `return`) VALUES (1, 3, '2016-03-10', NULL);
-INSERT INTO `test_materielelectrique`.`users_has_books` (`users_id`, `books_id`, `borrowed`, `return`) VALUES (2, 1, '2016-04-10', NULL);
-INSERT INTO `test_materielelectrique`.`users_has_books` (`users_id`, `books_id`, `borrowed`, `return`) VALUES (1, 2, '2016-03-10', NULL);
-INSERT INTO `test_materielelectrique`.`users_has_books` (`users_id`, `books_id`, `borrowed`, `return`) VALUES (2, 4, '2016-04-10', NULL);
+USE `api_library_php`;
+INSERT INTO `api_library_php`.`users_has_books` (`users_id`, `books_id`, `borrowed`, `return`) VALUES (1, 1, '2016-01-31', '2016-02-02');
+INSERT INTO `api_library_php`.`users_has_books` (`users_id`, `books_id`, `borrowed`, `return`) VALUES (1, 3, '2016-03-10', NULL);
+INSERT INTO `api_library_php`.`users_has_books` (`users_id`, `books_id`, `borrowed`, `return`) VALUES (2, 1, '2016-04-10', NULL);
+INSERT INTO `api_library_php`.`users_has_books` (`users_id`, `books_id`, `borrowed`, `return`) VALUES (1, 2, '2016-03-10', NULL);
+INSERT INTO `api_library_php`.`users_has_books` (`users_id`, `books_id`, `borrowed`, `return`) VALUES (2, 4, '2016-04-10', NULL);
 
 COMMIT;
 

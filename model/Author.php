@@ -15,7 +15,7 @@ class Author extends  Model
         //_{name}_ est le nom de l'auteur en minuscule et des "_" remplacent les espaces
         $name = str_replace("_"," ","$id");
 
-        $sql = "SELECT books.id, books.title FROM {$this->table} RIGHT JOIN books ON {$this->table}.id = books.{$this->table} WHERE {$this->table}.name = :name ORDER BY $order ";
+        $sql = "SELECT books.id, books.title FROM {$this->table} RIGHT JOIN books ON {$this->table}.id = books.{$this->table} WHERE {$this->table}.name = :name ORDER BY books.$order ";
 
         $stmt = $this->connexion->prepare($sql);
 

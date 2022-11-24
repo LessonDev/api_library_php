@@ -110,7 +110,7 @@ class Books extends  Model
         $stmt = $this->connexion->prepare($sql);
 
         $stmt->bindValue(":title", $new["title"] ?? $current["data"][0]["title"], PDO::PARAM_STR);
-        $stmt->bindValue(":author", $new["author"] ?? intval($current["data"][0]["author"]["id"]), PDO::PARAM_STR);
+        $stmt->bindValue(":author", $new["author"] ?? $current["data"][0]["author"]["id"], PDO::PARAM_INT);
 
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
 
@@ -120,16 +120,17 @@ class Books extends  Model
     }
 
     //6.2 PUT /books/{id}
-    public function updatePUT(array $current, string $id, array $new): int
+    public function updatePUT(string $id, array $new): int
     {
         $sql = "UPDATE {$this->table}
                 SET title = :title, author = :author
                 WHERE id = :id";
 
+
         $stmt = $this->connexion->prepare($sql);
 
         $stmt->bindValue(":title", $new["title"] , PDO::PARAM_STR);
-        $stmt->bindValue(":author", $new["author"] , PDO::PARAM_STR);
+        $stmt->bindValue(":author", $new["author"],PDO::PARAM_INT);
 
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
 

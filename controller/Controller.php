@@ -98,7 +98,7 @@ class Controller
                     return;
                 }
                 $param = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
-                $data = $this->model->updatePUT($current,$id,$param);
+                $data = $this->model->updatePUT($id,$param);
 
                 //6.3 PUT /books/{id}
                 //Un livre au format JSON
