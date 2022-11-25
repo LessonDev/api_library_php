@@ -4,11 +4,9 @@
 class Controller
 {
     protected $model;
-    protected $table;
 
     public function __construct($model)
     {
-        $this->table = $model->table;
         $this->model = $model;
     }
 
@@ -36,7 +34,7 @@ class Controller
                     //4.3 GET /author/{name}/books
                     if(!$data) {
                         http_response_code(404);
-                        echo json_encode(["message" => "$this->table not found"]);
+                        echo json_encode(["message" => "{$this->model->getTable()} not found"]);
                         return;
                     }
                     elseif($data == "incorrect_parameters") {
@@ -68,7 +66,7 @@ class Controller
                 $current = $this->model->get($id);
                 if(!$current){
                     http_response_code(404);
-                    echo json_encode(["message" => "$this->table not found"]);
+                    echo json_encode(["message" => "{$this->model->getTable()} not found"]);
                     return;
                 }
                 $param = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
@@ -81,10 +79,10 @@ class Controller
                     echo json_encode(["error" => "non update,no change detected"]);
                     return;
                 }
-                $getPath = str_replace("index.php", "$this->table/{$id}", $_SERVER['PHP_SELF']);
+                $getPath = str_replace("index.php", "{$this->model->getTable()}/{$id}", $_SERVER['PHP_SELF']);
                 http_response_code(201);
                 echo json_encode([
-                    "message" => "$this->table $id updated",
+                    "message" => "{$this->model->getTable()} $id updated",
                     "GET" => "$getPath" //Le livre modifier (cf la sortie de l'api GET /books/{id} )
                 ]);
                 break;
@@ -93,7 +91,7 @@ class Controller
                 $current = $this->model->get($id);
                 if(!$current){
                     http_response_code(404);
-                    echo json_encode(["message" => "$this->table not found"]);
+                    echo json_encode(["message" => "{$this->model->getTable()} not found"]);
                     return;
                 }
                 $param = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
@@ -106,10 +104,10 @@ class Controller
                     echo json_encode(["error" => "non update,no change detected"]);
                     return;
                 }
-                $getPath = str_replace("index.php", "$this->table/{$id}", $_SERVER['PHP_SELF']);
+                $getPath = str_replace("index.php", "{$this->model->getTable()}/{$id}", $_SERVER['PHP_SELF']);
                 http_response_code(201);
                 echo json_encode([
-                    "message" => "$this->table $id updated",
+                    "message" => "{$this->model->getTable()} $id updated",
                     "GET" => "$getPath" //Le livre modifier (cf la sortie de l'api GET /books/{id} )
                 ]);
                 break;
@@ -122,12 +120,12 @@ class Controller
                 //Un livre au format JSON
                 if(!$data){
                     http_response_code(404);
-                    echo json_encode(["message" => "$this->table not found"]);
+                    echo json_encode(["message" => "{$this->model->getTable()} not found"]);
                     return;
                 }
                 http_response_code(200);
                 echo json_encode([
-                    "message" => "$this->table id = $id is deleted",
+                    "message" => "{$this->model->getTable()} id = $id is deleted",
                 ]);
                 break;
             default:
@@ -153,7 +151,7 @@ class Controller
                 //Une liste au format JSON
                 if(!$data) {
                     http_response_code(404);
-                    echo json_encode(["message" => "$this->table not found"]);
+                    echo json_encode(["message" => "{$this->model->getTable()} not found"]);
                     return;
                 }
                 elseif($data == "incorrect_parameters") {
@@ -196,10 +194,10 @@ class Controller
                     return;
                 }
                 //cette api doit permettre de créer un livre 3
-                $getPath = str_replace("index.php", "$this->table/{$data}", $_SERVER['PHP_SELF']);
+                $getPath = str_replace("index.php", "{$this->model->getTable()}/{$data}", $_SERVER['PHP_SELF']);
                 http_response_code(201);
                 echo json_encode([
-                    "message" => "$this->table created",
+                    "message" => "{$this->model->getTable()} created",
                     //Le livre crée (cf la sortie de l'api GET /books/{id} )
                     "GET" => "$getPath" //Le livre modifier (cf la sortie de l'api GET /books/{id} )
                 ]);

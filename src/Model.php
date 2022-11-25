@@ -5,11 +5,16 @@ require_once 'Database.php';
 class Model  extends  Database
 {
     protected $connexion;
+    public $table;
 
     public function __construct()
     {
         parent::__construct();
         $this->connexion = $this->getConnection();
+    }
+
+    public function getTable(){
+        return $this->table;
     }
 
     //7.2 DELETE /books/{id}
