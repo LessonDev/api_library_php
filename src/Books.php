@@ -9,7 +9,7 @@ class Books extends  Model
     //1.2 GET /books/{id}
     //#### Input
     //_{id}_ est l'identifiant du livre
-    public function get(string $id)
+    public function get(int $id)
     {
         $sql ="SELECT  books.id , books.title, author.id as ai FROM {$this->table} JOIN author ON books.author = author.id WHERE books.id = :id";
 
@@ -101,7 +101,7 @@ class Books extends  Model
     }
 
     //5.2 PATCH /books/{id}
-    public function updatePatch(array $current, string $id, array $new): int
+    public function updatePatch(array $current, int $id, array $new): int
     {
         $sql = "UPDATE {$this->table}
                 SET title = :title, author = :author
@@ -115,12 +115,11 @@ class Books extends  Model
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
 
         $stmt->execute();
-
         return $stmt->rowCount();
     }
 
     //6.2 PUT /books/{id}
-    public function updatePUT(string $id, array $new): int
+    public function updatePUT(int $id, array $new): int
     {
         $sql = "UPDATE {$this->table}
                 SET title = :title, author = :author
