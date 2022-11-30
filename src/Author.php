@@ -3,7 +3,7 @@ require_once 'Model.php';
 
 class Author extends  Model
 {
-    public $table = 'author';
+    protected $table = 'author';
 
     //4.2 GET /author/{name}/books
     public function getBooksAuthor(string $id, array $data)

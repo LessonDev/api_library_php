@@ -4,7 +4,7 @@ require_once 'Model.php';
 
 class Books extends  Model
 {
-    public $table = 'books';
+    protected $table = 'books';
 
     //1.2 GET /books/{id}
     //#### Input

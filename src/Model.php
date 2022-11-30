@@ -5,7 +5,7 @@ require_once 'Database.php';
 class Model  extends  Database
 {
     protected $connexion;
-    public $table;
+    protected $table;
 
     public function __construct()
     {

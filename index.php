@@ -5,7 +5,10 @@ spl_autoload_register(function ($class) {
     require __DIR__ . "$_class";
 });
 
+//Choisit la function utilisateur callback pour gérer les erreurs dans un script.
 set_error_handler("ErrorHandler::handleError");
+
+//Définit une function utilisateur de question exceptions
 set_exception_handler("ErrorHandler::handleException");
 
 header("Access-Control-Allow-Origin: *");
@@ -26,6 +29,7 @@ $books = $parts[4] ?? null;
 
 $modelName = ucfirst($parts[2]);
 
+//Instansiation de classes
 $model =  new $modelName();
 $controller = new Controller($model);
 

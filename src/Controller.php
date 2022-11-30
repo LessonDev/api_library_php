@@ -29,7 +29,7 @@ class Controller
                 if($books == 'books'){
                     //#### Input
                     // l'api accepte le parametre _order_ qui peut prendre les valeurs _id_ ou _title_
-                    $param = (array) json_decode(file_get_contents("php://input"), true);
+                    $param = $this->getParam();
                     $data = $this->model->getBooksAuthor($id,$param);
                     //4.3 GET /author/{name}/books
                     if(!$data) {
@@ -38,7 +38,7 @@ class Controller
                         return;
                     }
                     elseif($data == "incorrect_parameters") {
-                        http_response_code(422);
+                        http_response_code(400);//Bad Request
                         echo json_encode(["message" => "Incorrect parameter: must be 'title' book or 'id'"]);
                         return;
                     }
@@ -69,7 +69,8 @@ class Controller
                     echo json_encode(["message" => "{$this->model->getTable()} not found"]);
                     return;
                 }
-                $param = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
+                //Lit tout un fichier dans une chaîne
+                $param = $this->getParam();
                 $data = $this->model->updatePatch($current,$id,$param);
 
                 //5.3 PATCH /books/{id}
@@ -94,7 +95,8 @@ class Controller
                     echo json_encode(["message" => "{$this->model->getTable()} not found"]);
                     return;
                 }
-                $param = (array) json_decode(file_get_contents("php://input"), true);//Lit tout un fichier dans une chaîne
+                //Lit tout un fichier dans une chaîne
+                $param = $this->getParam();
                 $data = $this->model->updatePUT($id,$param);
 
                 //6.3 PUT /books/{id}
@@ -105,7 +107,7 @@ class Controller
                     return;
                 }
                 $getPath = str_replace("index.php", "{$this->model->getTable()}/{$id}", $_SERVER['PHP_SELF']);
-                http_response_code(201);
+                http_response_code(204);
                 echo json_encode([
                     "message" => "{$this->model->getTable()} $id updated",
                     "GET" => "$getPath" //Le livre modifier (cf la sortie de l'api GET /books/{id} )
@@ -123,7 +125,7 @@ class Controller
                     echo json_encode(["message" => "{$this->model->getTable()} not found"]);
                     return;
                 }
-                http_response_code(200);
+                http_response_code(204);
                 echo json_encode([
                     "message" => "{$this->model->getTable()} id = $id is deleted",
                 ]);
@@ -144,7 +146,7 @@ class Controller
                 //#### Input
                 // l'api accepte le parametre _order_ qui peut prendre
                 // les valeurs _author_ ou _title_ et triera les livres par auteur ou par titre
-                $param = (array) json_decode(file_get_contents("php://input"), true);
+                $param = $this->getParam();
 
                 $data =  $this->model->getAll($param);
                 //3.2 GET /books
@@ -155,7 +157,7 @@ class Controller
                     return;
                 }
                 elseif($data == "incorrect_parameters") {
-                    http_response_code(422);
+                    http_response_code(400);;//Bad Request
                     echo json_encode(["message" => "Incorrect parameter: must be 'title' book or 'author'"]);
                     return;
                 }
@@ -177,7 +179,7 @@ class Controller
                 // liste des parametres (tous sont obligatoires)
                 // __title__, titre du livre
                 //__author__, id de l'auteur
-                $param = (array) json_decode(file_get_contents("php://input"), true);
+                $param = $this->getParam();
 
                 //*json_decode(string,true)//Récupère une chaîne encodée JSON et la convertit en une valeur de PHP.
                 //*Lorsque ce paramètre vaut true, les objets JSON seront retournés comme tableaux associatifs ; lorsque ce
@@ -189,7 +191,7 @@ class Controller
                     // indique que le serveur a compris le type de contenu de la requête
                     // et que la syntaxe de la requête est correcte mais que
                     //* le serveur n'a pas été en mesure de réaliser les instructions demandées.
-                    http_response_code(422);
+                    http_response_code(400);;//Bad Request
                     echo json_encode(["error" => "non created"]);
                     return;
                 }
@@ -211,6 +213,11 @@ class Controller
                 echo json_encode(["message" => "Method Not Allowed"]);
                 header("Allow: GET, POST");
         }
+    }
+
+    public function getParam(){
+        $param = (array) json_decode(file_get_contents("php://input"), true);
+        return $param;
     }
 
 }

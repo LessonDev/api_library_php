@@ -14,7 +14,7 @@ class Database
         $this->host = 'localhost';
         $this->name = 'api_library_php';
         $this->user = 'root';
-        $this->password = 'root';
+        $this->password = '';
     }
 
     public function getConnection(): PDO
