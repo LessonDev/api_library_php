@@ -4,18 +4,19 @@ require_once 'Model.php';
 
 class Books extends  Model
 {
-    public $table = 'books';
+    protected $table = 'books';
 
     //1.2 GET /books/{id}
     //#### Input
     //_{id}_ est l'identifiant du livre
-    public function get(string $id)
+    public function get(int $id)
     {
         $sql ="SELECT  books.id , books.title, author.id as ai FROM {$this->table} JOIN author ON books.author = author.id WHERE books.id = :id";
 
         $stmt = $this->connexion->prepare($sql);
-
+   
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+    
         $stmt->execute();
 
         $data = [];
@@ -64,28 +65,37 @@ class Books extends  Model
 
         // l'api accepte le parametre _order_ qui peut prendre les valeurs
         // _author_ ou _title_ et triera les livres par auteur ou par titre
+        
         $order = $data['order'] ?? 'id';
-
+        if($order == 'title') {
+            $order = 'books.title';
+        }
+        elseif($order == 'author')
+        {
+            $order = 'author.name';
+        }
+       
         $sql ="SELECT books.id, books.title, author.id as ai FROM {$this->table} JOIN author ON books.author = author.id ORDER BY $order";
-
+       
         $stmt = $this->connexion->prepare($sql);
-
+        
         if(!$stmt) {
             return 'incorrect_parameters';
         }
-        $stmt->bindValue(":order", $order, PDO::PARAM_STR);
 
+        //$stmt->bindValue(":order", $order, PDO::PARAM_STR);
+        
         $stmt->execute();
-
+       
         $data = [];
         $i = 0;
-
+         
         while ($book = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $data["data"][$i]["id"] = $book["id"];
             $data["data"][$i]["title"] = $book["title"];
 
             $data["data"][$i]["type"] = "book";
-
+           
             $sql ="SELECT  author.id, author.name  FROM {$this->table} JOIN author ON books.author = author.id ";
             $stmta = $this->connexion->query($sql);
 
@@ -96,12 +106,12 @@ class Books extends  Model
             }
             $i++;
         }
-
-        return $data;
+        
+         return $data;
     }
 
     //5.2 PATCH /books/{id}
-    public function updatePatch(array $current, string $id, array $new): int
+    public function updatePatch(array $current, int $id, array $new): int
     {
         $sql = "UPDATE {$this->table}
                 SET title = :title, author = :author
@@ -115,12 +125,11 @@ class Books extends  Model
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
 
         $stmt->execute();
-
         return $stmt->rowCount();
     }
 
     //6.2 PUT /books/{id}
-    public function updatePUT(string $id, array $new): int
+    public function updatePUT(int $id, array $new): int
     {
         $sql = "UPDATE {$this->table}
                 SET title = :title, author = :author
